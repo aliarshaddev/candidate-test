@@ -1,5 +1,9 @@
 ```diff
-- There are two branches in this repo  i have implemented the login functionality two ways first is using Laravel login \n and 2nd is using only sessions to login,  have a look at both and let me know your reviews. you don't have to run database migrations for the branch.
++  There are two branches in this repo.
++ I have implemented the login functionality in two ways:
++  1. Using Laravel login.
++  2. Using only sessions to login. 
++ Please have a look at both and let me know your reviews. You don't have to run database migrations for the branch.
 ```
 ##Set up & Deploy
 1. Open project directory in terminal and run command 
