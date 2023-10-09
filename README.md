@@ -14,11 +14,7 @@ composer install
 ```console
 php artisan key:generate
 ```
-3. Run command 
-```console
-php artisan migrate
-```
-4. Run command
+3. Run command
 ```console
  php artisan serve
 ```
