@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Client\ApiClient;
+use App\Clients\ApiClient;
 use Illuminate\Http\Request;
 class AuthorController extends Controller
 {

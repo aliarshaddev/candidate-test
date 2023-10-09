@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
-use App\Client\ApiClient;
+use App\Clients\ApiClient;
 
 class CustomAuthService
 {
