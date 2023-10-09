@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\CustomAuthService;
 use Illuminate\Http\Request;
-use Auth;
 use Session;
 
 class AuthController extends Controller
@@ -32,22 +31,20 @@ class AuthController extends Controller
         $data = $this->validateLoginData();
         $email = $data['email'];
         $password = $data['password'];
-        if ($this->customAuthService->login($email, $password)) {
-            if (Auth::attempt(['email' => $email, 'password' => $password])) {
-                // Authentication successful
-                return redirect()->route('dashboard'); // Redirect to the authenticated user's dashboard
-            }
-            // Authentication failed
-            return back()->withErrors(['email' => 'Login failed.']);
-        } else {
-            return back()->withErrors(['email' => 'Login failed.']);
+        if ($this->customAuthService->loginViaSession($email, $password)) {
+            // Authentication successful
+            return redirect()->route('dashboard'); // Redirect to the authenticated user's dashboard
         }
+        else
+        {
+            return back()->withErrors(['error' => 'Login failed.']);
+        }
+
     }
     public function logout()
     {
         // Clear all session data
         Session::flush();
-        Auth::logout();
         return redirect()->route('login'); // Redirect to the login page
     }
 }

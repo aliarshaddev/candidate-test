@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Http;
 Route::get('/login', [AuthController::class,'loginForm'])->name('login');
 Route::post('/login', [AuthController::class,'login']);
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
-Route::middleware(['auth','check_access_token_expiration'])->group(function () {
+Route::middleware(['custom_auth','check_access_token_expiration'])->group(function () {
     Route::get('/',[AuthorController::class,'index'])->name('dashboard');
     //Authors
     Route::get('/author/delete/{author_id}',[AuthorController::class,'deleteAuthor'])->name('author.delete');
