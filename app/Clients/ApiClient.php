@@ -1,5 +1,5 @@
 <?php
-namespace App\Client;
+namespace App\Clients;
 
 use Illuminate\Support\Facades\Http;
 class ApiClient

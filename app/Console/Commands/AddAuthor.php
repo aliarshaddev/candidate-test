@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Client\ApiClient;
+use App\Clients\ApiClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 class AddAuthor extends Command

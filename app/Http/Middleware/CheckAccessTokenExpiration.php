@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Client\ApiClient;
+use App\Clients\ApiClient;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
