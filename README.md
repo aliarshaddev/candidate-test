@@ -10,6 +10,10 @@
 + I have used authorization option from your api docs.
 + You can change the basic auth token for api in config/api.php 
 ```
+Current auth token 
+```console
+f0a2f8d3c9e7b5a1d6b4e2c3f8a0e6b7
+```
 ##Set up & Deploy
 1. Open project directory in terminal and run command 
 ```console
