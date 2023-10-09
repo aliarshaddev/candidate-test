@@ -27,7 +27,7 @@ class AddAuthor extends Command
     public function handle()
     {
         $apiClient = new ApiClient();
-        echo "Enter credentials First.";
+        echo "Enter client credentials First.";
         $email = $this->ask('Email');
         $password = $this->secret('Password');
         $request = array();
