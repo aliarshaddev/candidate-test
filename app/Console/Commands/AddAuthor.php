@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Console\Commands;
-use Session;
+
+use App\Client\ApiClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
 class AddAuthor extends Command
 {
     /**
@@ -26,6 +26,7 @@ class AddAuthor extends Command
      */
     public function handle()
     {
+        $apiClient = new ApiClient();
         echo "Enter credentials First.";
         $email = $this->ask('Email');
         $password = $this->secret('Password');
@@ -37,19 +38,10 @@ class AddAuthor extends Command
         $request['gender'] = $this->ask('Gender (male/female)');
         $request['place_of_birth'] = $this->ask('Place of birth');
         // Make an API request to log in the user
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.config('api.auth_token'),
-        ])->post(config('api.base_url').'/token', [
-            'email' => $email,
-            'password' => $password,
-        ]);
+        $response = $apiClient->getApiToken($email, $password);
         if ($response->successful()) {
             $data = $response->json();
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '.$data['token_key'],
-            ])->post(config('api.base_url').'/authors', $request);
+            $response = $apiClient->addAuthor($data['token_key'], $request);
             if ($response->successful()) {
                 echo "Author added.";
             }

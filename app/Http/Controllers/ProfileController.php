@@ -1,15 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Client\ApiClient;
 use Illuminate\Support\Facades\Http;
 
 class ProfileController extends Controller
 {
+    protected $apiClient;
+
+    public function __construct(ApiClient $apiClient)
+    {
+        $this->apiClient = $apiClient;
+    }
     public function showProfile()
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->get(config('api.base_url').'/me');
+        $response = $this->apiClient->getMyProfile();
         if ($response->successful()) {
             $data = $response->json();
             return view('profile', ['profile' => $data]);

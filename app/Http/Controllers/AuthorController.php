@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Http;
+
+use App\Client\ApiClient;
 use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
+    protected $apiClient;
+
+    public function __construct(ApiClient $apiClient)
+    {
+        $this->apiClient = $apiClient;
+    }
     public function index(Request  $request)
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->get(config('api.base_url').'/authors?orderBy='.$request->input('orderBy', 'id').'&direction='.$request->input('sortBy', 'ASC').'&limit='.$request->input('limit', '12').'&page='.$request->input('page', 1));
+        $response = $this->apiClient->getAuthors($request);
         if ($response->successful()) {
             $data = $response->json();
             return view('author.index', ['authors' => $data]);
@@ -19,16 +24,12 @@ class AuthorController extends Controller
     }
     public function deleteAuthor($author_id)
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->get(config('api.base_url').'/authors/'.$author_id);
+        $response = $this->apiClient->getAuthor($author_id);
         if ($response->successful()) {
             $data = $response->json();
             if(!isset($data['books']) || empty($data['books']))
             {
-                $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . session('access_token'),
-                ])->delete(config('api.base_url') . '/authors/' . $author_id);
+                $response = $this->apiClient->deleteAuthor($author_id);
                 if ($response->successful()) {
                     return redirect()->route('dashboard')->with('success', 'Author deleted.');
                 } else {
@@ -45,9 +46,7 @@ class AuthorController extends Controller
     }
     public function getBooks($author_id)
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->get(config('api.base_url').'/authors/'.$author_id);
+        $response = $this->apiClient->getBooks($author_id);
         if ($response->successful()) {
             $data = $response->json();
             return view('author.books', ['author' => $data]);

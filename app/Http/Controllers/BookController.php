@@ -1,10 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Client\ApiClient;
 use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
+    protected $apiClient;
+
+    public function __construct(ApiClient $apiClient)
+    {
+        $this->apiClient = $apiClient;
+    }
     private function validateBookData()
     {
         $request = Request();
@@ -20,9 +28,7 @@ class BookController extends Controller
     }
     public function deleteBook($book_id)
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . session('access_token'),
-        ])->delete(config('api.base_url') . '/books/' . $book_id);
+        $response = $this->apiClient->deleteBook($book_id);
         if ($response->successful()) {
             return redirect()->back()->with('success', 'Book deleted.');
         } else {
@@ -31,9 +37,7 @@ class BookController extends Controller
     }
     public function showAddBookForm()
     {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->get(config('api.base_url').'/authors?orderBy=id&direction=ASC&limit=100&page=1');
+        $response = $this->apiClient->getAllAuthors();
         if ($response->successful()) {
             $data = $response->json();
             return view('book.add', ['authors' => $data['items']]);
@@ -53,10 +57,7 @@ class BookController extends Controller
         $request['number_of_pages'] = (int) $data['pages'];
         $request['author'] = array();
         $request['author']['id'] = $data['author'];
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer '.session('access_token'),
-        ])->post(config('api.base_url').'/books', $request);
+        $response = $this->apiClient->addBook($request);
         if ($response->successful()) {
             return redirect()->route('author.books', $data['author'])->with('success', 'Book Added.');
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Client\ApiClient;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,12 @@ class CheckAccessTokenExpiration
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+    protected $apiClient;
+
+    public function __construct(ApiClient $apiClient)
+    {
+        $this->apiClient = $apiClient;
+    }
     public function handle(Request $request, Closure $next): Response
     {
         $accessTokenExpiration = session('access_token_expiration');
@@ -21,10 +28,7 @@ class CheckAccessTokenExpiration
         if (now()->gte($accessTokenExpiration)) {
             // Regenerate the token (make a request to your API to get a new token)
             $accessTokenRefreshKey = session('access_token_refresh_key');
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer '.config('api.auth_token'),
-            ])->get(config('api.base_url').'/token/refresh/'.$accessTokenRefreshKey);
-
+            $response = $this->apiClient->refreshToken($accessTokenRefreshKey);
             if ($response->successful()) {
                 $data = $response->json();
                 $accessToken = $data['token_key'];
