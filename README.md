@@ -14,6 +14,15 @@ Current auth token
 ```console
 f0a2f8d3c9e7b5a1d6b4e2c3f8a0e6b7
 ```
+##Client for api
+Email
+```console
+ahsoka.tano@royal-apps.io
+```
+Password
+```console
+Kryze4President
+```
 ##Set up & Deploy
 1. Open project directory in terminal and run command 
 ```console
